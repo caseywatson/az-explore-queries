@@ -12,6 +12,7 @@ resources
 
 // Option 2:  Uncomment THE FOLLOWING SECTION to group resources by regex pattern. 
 //            Replace 'regex-pattern' with your regex pattern.
+//            The pattern should contain one and only one capture group.
 //            Use Copilot to quickly build regex patterns using sample resource names.
 
 // | extend group = tostring(extract_all(@'(?i)regex-pattern', name))
