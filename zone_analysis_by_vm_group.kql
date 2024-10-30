@@ -7,8 +7,8 @@ resources
 // Option 1:  Uncomment THE FOLLOWING SECTION to group resources by name prefix.
 //            Example: 'vmgroup01' name prefix is 'vmgroup'
 
-| where name matches regex '^[a-zA-Z]+\\d+$'             
-| extend group = tostring(extract('^[a-zA-Z]+', 0, name)) 
+// | where name matches regex '^[a-zA-Z]+\\d+$'             
+// | extend group = tostring(extract('^[a-zA-Z]+', 0, name)) 
 
 // Option 2:  Uncomment THE FOLLOWING SECTION to group resources by regex pattern. 
 //            Replace 'regex-pattern' with your regex pattern.
@@ -28,6 +28,14 @@ resources
 | where isnotempty(group)
 | summarize vmCount = count()
             by group, location, subscriptionId, vmZone = tostring(zones[0])
-| summarize zoneCount = countif(isnotempty(vmZone)),
-            totalVms = sum(vmCount)
-            by group
+| summarize zones = countif(isnotempty(vmZone)),
+            zonalVms = sumif(vmCount, isnotempty(vmZone)),
+            regionalVms = sumif(vmCount, isempty(vmZone)),
+            zonalSpreadPct = round(((stdevif(vmCount, isnotempty(vmZone)) / sumif(vmCount, isnotempty(vmZone))) * 100), 2)
+            by group, location, subscriptionId
+| project group, location, subscriptionId,
+          totalVms = zonalVms + regionalVms,
+          totalZonalVms = zonalVms,
+          totalRegionalVms = iff((regionalVms > 0), strcat(regionalVms, ' ⚠️'), tostring(regionalVms)),
+          totalZones = iff((zones < min_of(2, zonalVms)), strcat(zones, ' ⚠️'), tostring(zones)),
+          zonalSpreadPct = iff((zonalSpreadPct > 20), strcat(zonalSpreadPct, ' % ⚠️'), strcat(zonalSpreadPct, ' %'))
