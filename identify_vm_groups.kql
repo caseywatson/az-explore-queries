@@ -1,0 +1,17 @@
+resources
+| where type =~ 'microsoft.compute/virtualmachines'
+
+// How should resources be grouped?
+// Choose an option below and uncomment only the appropriate section.
+
+// Option:  Uncomment the following section to group resources by name prefix.
+//          Example: 'vmgroup01' name prefix is 'vmgroup'
+
+// | where name matches regex '^[a-zA-Z]+\\d+$'             
+// | extend group = tostring(extract('^[a-zA-Z]+', 0, name)) 
+
+// Option:  Uncomment the following section to group resources by regex pattern. 
+//          Replace 'regex-pattern' with your own regex pattern.
+//          Use Copilot to quickly build regex patterns using sample resource names.
+
+// | extend group = tostring(extract_all(@'(?i)regex-pattern', name))
