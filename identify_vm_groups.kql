@@ -26,3 +26,4 @@ resources
 // | extend group = tostring(tags['tag-name'])
 
 | where isnotempty(group)
+| summarize vmCount = count() by group, location, subscriptionId
