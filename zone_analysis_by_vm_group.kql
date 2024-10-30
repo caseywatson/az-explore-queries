@@ -31,11 +31,11 @@ resources
 | summarize zones = countif(isnotempty(vmZone)),
             zonalVms = sumif(vmCount, isnotempty(vmZone)),
             regionalVms = sumif(vmCount, isempty(vmZone)),
-            zonalSpreadPct = round(((stdevif(vmCount, isnotempty(vmZone)) / sumif(vmCount, isnotempty(vmZone))) * 100), 2)
+            zonalSpreadPct = round(100 - (((stdevif(vmCount, isnotempty(vmZone)) / sumif(vmCount, isnotempty(vmZone))) * 100)), 2)
             by group, location, subscriptionId
 | project group, location, subscriptionId,
           totalVms = zonalVms + regionalVms,
           totalZonalVms = zonalVms,
           totalRegionalVms = iff((regionalVms > 0), strcat(regionalVms, ' ⚠️'), tostring(regionalVms)),
           totalZones = iff((zones < min_of(2, zonalVms)), strcat(zones, ' ⚠️'), tostring(zones)),
-          zonalSpreadPct = iff((zonalSpreadPct > 20), strcat(zonalSpreadPct, ' % ⚠️'), strcat(zonalSpreadPct, ' %'))
+          zonalSpreadScore = iff((zonalSpreadPct < 80), strcat(zonalSpreadPct, ' % ⚠️'), strcat(zonalSpreadPct, ' %'))
