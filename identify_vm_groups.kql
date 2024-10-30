@@ -24,3 +24,5 @@ resources
 //            Replace 'tag-name' with your tag name.
 
 // | extend group = tostring(tags['tag-name'])
+
+| where isnotempty(group)
