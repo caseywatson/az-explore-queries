@@ -27,4 +27,4 @@ resources
 
 | where isnotempty(group)
 | extend zone = iff(isnull(zones[0]), '-', tostring(zones[0]))
-| summarize vmCount = count() by group, sku = tostring(properties.hardwareProfile.vmSize), zone, location, subscriptionId
+| summarize vmCount = count() by group, location, subscriptionId, zone, sku = tostring(properties.hardwareProfile.vmSize)
