@@ -1,0 +1,39 @@
+resources
+| where type =~ 'microsoft.compute/virtualmachines'
+
+// How should resources be grouped?
+// Choose an option below and uncomment only the appropriate section.
+
+// Option 1:  Uncomment THE FOLLOWING SECTION to group resources by name prefix.
+//            Example: 'vmgroup01' name prefix is 'vmgroup'
+
+// | where name matches regex '^[a-zA-Z]+\\d+$'             
+// | extend group = tostring(extract('^[a-zA-Z]+', 0, name)) 
+
+// Option 2:  Uncomment THE FOLLOWING SECTION to group resources by regex pattern. 
+//            Replace 'regex-pattern' with your regex pattern.
+//            Use Copilot to quickly build regex patterns using sample resource names.
+
+// | extend group = tostring(extract_all(@'(?i)regex-pattern', name))
+
+// Option 3:  Uncomment THE FOLLOWING SECTION to group resources by resource group.
+
+// | extend group = resourceGroup
+
+// Option 4:  Uncomment THE FOLLOWING SECTION to group resources by resource tag.
+//            Replace 'tag-name' with your tag name.
+
+// | extend group = tostring(tags['tag-name'])
+
+| where isnotempty(group)
+| extend vmssId = tostring(properties.virtualMachineScaleSet.id)
+| summarize vmCount = count(),
+            vmInVmssCount = countif(isnotempty(vmssId)),
+            vmNotInVmssCount = countif(isempty(vmssId)),
+            vmssCount = dcountif(vmssId, isnotempty(vmssId))
+            by group, location 
+| project group, location,
+          totalVms = vmCount,
+          totalVmsInVmss = vmInVmssCount,
+          totalVmsNotInVmss = iff((vmCount > 0 and vmNotInVmssCount > 0), strcat(vmNotInVmssCount, ' ⚠️'), tostring(vmNotInVmssCount)),
+          totalVmss = iff((vmCount > 0 and vmssCount != 1), strcat(vmssCount, ' ⚠️'), tostring(vmssCount))
