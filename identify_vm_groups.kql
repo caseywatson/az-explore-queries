@@ -4,23 +4,23 @@ resources
 // How should resources be grouped?
 // Choose an option below and uncomment only the appropriate section.
 
-// Option 1:  Uncomment the following section to group resources by name prefix.
+// Option 1:  Uncomment THE FOLLOWING SECTION to group resources by name prefix.
 //            Example: 'vmgroup01' name prefix is 'vmgroup'
 
 // | where name matches regex '^[a-zA-Z]+\\d+$'             
 // | extend group = tostring(extract('^[a-zA-Z]+', 0, name)) 
 
-// Option 2:  Uncomment the following section to group resources by regex pattern. 
+// Option 2:  Uncomment THE FOLLOWING SECTION to group resources by regex pattern. 
 //            Replace 'regex-pattern' with your regex pattern.
 //            Use Copilot to quickly build regex patterns using sample resource names.
 
 // | extend group = tostring(extract_all(@'(?i)regex-pattern', name))
 
-// Option 3:  Uncomment the following section to group resources by resource group.
+// Option 3:  Uncomment THE FOLLOWING SECTION to group resources by resource group.
 
 // | extend group = resourceGroup
 
-// Option 4:  Uncomment the following section to group resources by resource tag.
+// Option 4:  Uncomment THE FOLLOWING SECTION to group resources by resource tag.
 //            Replace 'tag-name' with your tag name.
 
 // | extend group = tostring(tags['tag-name'])
