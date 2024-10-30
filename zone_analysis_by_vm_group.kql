@@ -26,4 +26,35 @@ resources
 // | extend group = tostring(tags['tag-name'])
 
 | where isnotempty(group)
+| where tolower(tostring(location)) in~ (
+    "southafricanorth",
+    "eastasia",
+    "southeastasia",
+    "australiaeast",
+    "brazilsouth",
+    "canadacentral", 
+    "chinanorth3",
+    "northeurope",
+    "westeurope",
+    "francecentral",
+    "germanywestcentral",
+    "centralindia",
+    "israelcentral",
+    "italynorth",
+    "japaneast",
+    "koreacentral",
+    "norwayeast",
+    "polandcentral",
+    "qatarcentral",
+    "swedencentral",
+    "switzerlandnorth",
+    "uksouth",
+    "southcentralus",
+    "westus2",
+    "westus3",
+    "centralus",
+    "eastus",
+    "eastus2"
+    )
 | summarize vmCount = count() by group, location, subscriptionId, vmZone = tostring(zones[0])
+
