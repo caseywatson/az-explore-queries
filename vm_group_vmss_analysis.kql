@@ -28,13 +28,13 @@ resources
 
 | where isnotempty(group)
 | extend vmssId = tostring(properties.virtualMachineScaleSet.id)
-| summarize vmCount = count(),
-            vmInVmssCount = countif(isnotempty(vmssId)),
-            vmNotInVmssCount = countif(isempty(vmssId)),
-            vmssCount = dcountif(vmssId, isnotempty(vmssId))
+| summarize _totalVms = count(),
+            _totalVmsInVmss = countif(isnotempty(vmssId)),
+            _totalVmsNotInVmss = countif(isempty(vmssId)),
+            _totalVmss = dcountif(vmssId, isnotempty(vmssId))
             by group, location 
 | project group, location,
-          totalVms = vmCount,
-          totalVmsInVmss = vmInVmssCount,
-          totalVmsNotInVmss = iff((vmCount > 0 and vmNotInVmssCount > 0), strcat(vmNotInVmssCount, ' ⚠️'), tostring(vmNotInVmssCount)),
-          totalVmss = iff((vmCount > 0 and vmssCount != 1), strcat(vmssCount, ' ⚠️'), tostring(vmssCount))
+          totalVms = _totalVms,
+          totalVmsInVmss = _totalVmsInVmss,
+          totalVmsNotInVmss = iff((_totalVms > 0 and _totalVmsNotInVmss > 0), strcat(_totalVmsNotInVmss, ' ⚠️'), tostring(_totalVmsNotInVmss)),
+          totalVmss = iff((_totalVms > 0 and _totalVmss != 1), strcat(_totalVmss, ' ⚠️'), tostring(_totalVmss))
