@@ -50,6 +50,6 @@ resources
           totalRegionalVms = iff(alert_totalRegionalVms, strcat(_totalRegionalVms, ' ⚠️'), tostring(_totalRegionalVms)),
           totalZones = iff(alert_totalZones, strcat(_totalZones, ' ⚠️'), tostring(_totalZones)),
           zonalSpreadScore = iff(alert_zonalSpreadPct, strcat(_zonalSpreadPct, ' % ⚠️'), strcat(_zonalSpreadPct, ' %')),
-          notes = strcat(iff(alert_totalZones, 'Where possible, VMs should be deployed across at least two (2) zones. ', 'VMs are deployed across a sufficient number of zones. '),
-                         iff(alert_totalRegionalVms, 'Some VMs are regional (not deployed to any zone). ', 'All VMs are zonal; none are regional. '), 
-                         iff(alert_zonalSpreadPct, 'VMs are not evenly spread across zones (max spread of 20%). ', 'VMs are spread evenly across zones. '))
+          notes = strcat(iff(alert_totalZones, 'Where possible, VMs in this group should be deployed across at least two (2) zones. ', 'VMs in this group are deployed across a sufficient number of zones. '),
+                         iff(alert_totalRegionalVms, 'Some VMs in this group are regional (not deployed to any zone). ', 'All VMs in this group are zonal; none are regional. '), 
+                         iff(alert_zonalSpreadPct, 'VMs in this group are not evenly spread across zones (max spread of 20%). ', 'All VMs in this group are spread evenly across zones. '))
