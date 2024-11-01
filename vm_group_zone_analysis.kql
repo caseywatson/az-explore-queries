@@ -7,8 +7,8 @@ resources
 // Option 1:  Uncomment THE FOLLOWING SECTION to group resources by name prefix.
 //            Example: 'vmgroup01' name prefix is 'vmgroup'
 
-// | where name matches regex '^[a-zA-Z]+\\d+$'             
-// | extend group = tostring(extract('^[a-zA-Z]+', 0, name)) 
+| where name matches regex '^[a-zA-Z]+\\d+$'             
+| extend group = tostring(extract('^[a-zA-Z]+', 0, name)) 
 
 // Option 2:  Uncomment THE FOLLOWING SECTION to group resources by regex pattern. 
 //            Replace 'regex-pattern' with your regex pattern.
@@ -50,6 +50,6 @@ resources
           totalRegionalVms = iff(alert_totalRegionalVms, strcat(_totalRegionalVms, ' ⚠️'), tostring(_totalRegionalVms)),
           totalZones = iff(alert_totalZones, strcat(_totalZones, ' ⚠️'), tostring(_totalZones)),
           zonalSpreadScore = iff(alert_zonalSpreadPct, strcat(_zonalSpreadPct, ' % ⚠️'), strcat(_zonalSpreadPct, ' %')),
-          notes = strcat(iff(alert_totalZones, 'Where possible, VMs should be deployed across at least two (2) zones. ', ''),
-                         iff(alert_totalRegionalVms, 'Some VMs are regional (not deployed to any zone). ', ''), 
-                         iff(alert_zonalSpreadPct, 'VMs are not evenly spread across zones (max spread of 20%). ', ''))
+          notes = strcat(iff(alert_totalZones, 'Where possible, VMs should be deployed across at least two (2) zones. ', 'VMs are deployed across a sufficient number of zones. '),
+                         iff(alert_totalRegionalVms, 'Some VMs are regional (not deployed to any zone). ', 'All VMs are zonal; none are regional. '), 
+                         iff(alert_zonalSpreadPct, 'VMs are not evenly spread across zones (max spread of 20%). ', 'VMs are spread evenly across zones. '))
