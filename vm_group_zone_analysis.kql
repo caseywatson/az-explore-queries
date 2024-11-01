@@ -24,7 +24,7 @@ resources
 // Option 4:  Uncomment THE FOLLOWING SECTION to group resources by resource tag.
 //            Replace 'tag-name' with your tag name.
 
-// | extend group = tostring(tags['tag-name'])
+// | extend group = tostring(tags['epic-app'])
 
 | where isnotempty(group)
 | summarize vmCount = count()
@@ -32,10 +32,10 @@ resources
 | summarize _totalZones = countif(isnotempty(vmZone)),
             _totalZonalVms = sumif(vmCount, isnotempty(vmZone)),
             _totalRegionalVms = sumif(vmCount, isempty(vmZone)),
-            _zonalSpreadPct = round(100 - (((stdevif(vmCount, isnotempty(vmZone)) / sumif(vmCount, isnotempty(vmZone))) * 100)), 2)
+            _zonalSpreadPct = iff(countif(isnotempty(vmZone)) < 2, real(0), round(100 - (((stdevif(vmCount, isnotempty(vmZone)) / sumif(vmCount, isnotempty(vmZone))) * 100)), 2))
             by group, location, subscriptionId
 | project _totalZones, _totalZonalVms, _totalRegionalVms, _zonalSpreadPct, group, location, subscriptionId,
-          alert_totalZones = tobool(_totalZones < min_of(2, _totalZonalVms),
+          alert_totalZones = tobool(_totalZones < min_of(2, _totalZonalVms)),
           alert_totalRegionalVms = tobool(_totalRegionalVms > 0),
           alert_zonalSpreadPct = tobool(_zonalSpreadPct < 80)
 | project group, location, subscriptionId,
@@ -43,4 +43,7 @@ resources
           totalZonalVms = _totalZonalVms,
           totalRegionalVms = iff(alert_totalRegionalVms, strcat(_totalRegionalVms, ' ⚠️'), tostring(_totalRegionalVms)),
           totalZones = iff(alert_totalZones, strcat(_totalZones, ' ⚠️'), tostring(_totalZones)),
-          zonalSpreadScore = iff(alert_zonalSpreadPct, strcat(_zonalSpreadPct, ' % ⚠️'), strcat(_zonalSpreadPct, ' %'))
+          zonalSpreadScore = iff(alert_zonalSpreadPct, strcat(_zonalSpreadPct, ' % ⚠️'), strcat(_zonalSpreadPct, ' %')),
+          notes = strcat(iff(alert_totalZones, 'VMs should be deployed across a minimum of two (2) zones. ', ''),
+                         iff(alert_totalRegionalVms, 'Some VMs are regional (not deployed in zones.) ', ''), 
+                         iff(alert_zonalSpreadPct, 'VMs are not evenly spread across zones (spread within 20%). ', ''))
