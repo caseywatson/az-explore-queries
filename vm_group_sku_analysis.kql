@@ -7,8 +7,8 @@ resources
 // Option 1:  Uncomment THE FOLLOWING SECTION to group resources by name prefix.
 //            Example: 'vmgroup01' name prefix is 'vmgroup'
 
-| where name matches regex '^[a-zA-Z]+\\d+$'             
-| extend group = tostring(extract('^[a-zA-Z]+', 0, name)) 
+// | where name matches regex '^[a-zA-Z]+\\d+$'             
+// | extend group = tostring(extract('^[a-zA-Z]+', 0, name)) 
 
 // Option 2:  Uncomment THE FOLLOWING SECTION to group resources by regex pattern. 
 //            Replace 'regex-pattern' with your regex pattern.
