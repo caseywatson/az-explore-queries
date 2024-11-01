@@ -24,7 +24,13 @@ resources
 // Option 4:  Uncomment THE FOLLOWING SECTION to group resources by resource tag.
 //            Replace 'tag-name' with your tag name.
 
-// | extend group = tostring(tags['tag-name'])
+// | extend group = tostring(tags['epic-app'])
+
+// Option 5:  Uncomment THE FOLLOWING SECTION to provide your own grouping expression.
+//            Replace '// grouping expression' with your own valid KQL grouping expression.
+//            Your grouping expression should return a single string.
+
+// | extend group = // grouping expression
 
 | where isnotempty(group)
 | extend vmssId = tostring(properties.virtualMachineScaleSet.id)
