@@ -26,9 +26,9 @@ resources
 
 // | extend group = tostring(tags['epic-app'])
 
-// Option 5:  Uncomment THE FOLLOWING SECTION to provide your own grouping logic.
-              Replace '// grouping expression' with your own valid KQL grouping expression.
-              Your grouping expression should return a single string.
+// Option 5:  Uncomment THE FOLLOWING SECTION to provide your own grouping expression.
+//            Replace '// grouping expression' with your own valid KQL grouping expression.
+//            Your grouping expression should return a single string.
 
 // | extend group = // grouping expression
 
