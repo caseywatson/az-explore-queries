@@ -7,8 +7,8 @@ resources
 // Option 1:  Uncomment THE FOLLOWING SECTION to group resources by name prefix.
 //            Example: 'vmgroup01' name prefix is 'vmgroup'
 
-// | where name matches regex '^[a-zA-Z]+\\d+$'             
-// | extend group = tostring(extract('^[a-zA-Z]+', 0, name)) 
+| where name matches regex '^[a-zA-Z]+\\d+$'             
+| extend group = tostring(extract('^[a-zA-Z]+', 0, name)) 
 
 // Option 2:  Uncomment THE FOLLOWING SECTION to group resources by regex pattern. 
 //            Replace 'regex-pattern' with your regex pattern.
@@ -24,7 +24,13 @@ resources
 // Option 4:  Uncomment THE FOLLOWING SECTION to group resources by resource tag.
 //            Replace 'tag-name' with your tag name.
 
-// | extend group = tostring(tags['tag-name'])
+// | extend group = tostring(tags['epic-app'])
+
+// Option 5:  Uncomment THE FOLLOWING SECTION to provide your own grouping expression.
+//            Replace '// grouping expression' with your own valid KQL grouping expression.
+//            Your grouping expression should return a single string.
+
+// | extend group = // grouping expression
 
 | where isnotempty(group)
 | extend zone = iff(isnull(zones[0]), '-', tostring(zones[0]))
