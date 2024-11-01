@@ -47,5 +47,5 @@ resources
           totalVmsInVmss = _totalVmsInVmss,
           totalVmsNotInVmss = iff(alert_totalVmsNotInVmss, strcat(_totalVmsNotInVmss, ' ⚠️'), tostring(_totalVmsNotInVmss)),
           totalVmss = iff(alert_totalVmss, strcat(_totalVmss, ' ⚠️'), tostring(_totalVmss)),
-          notes = strcat(iff(alert_totalVmsNotInVmss, '⚠️ Some VMs in this group are not part of a VMSS. ', '✅ All VMs are protected by VMSS. '),
+          notes = strcat(iff(alert_totalVmsNotInVmss, '⚠️ Some VMs in this group are not part of a VMSS. ', '✅ All VMs in this group are protected by VMSS. '),
                          iff(alert_totalVmss, '⚠️ All VMs in this group should be part of the same VMSS. ', '✅ All VMs in this group are part of the same VMSS. '))
