@@ -34,9 +34,13 @@ resources
             _totalRegionalVms = sumif(vmCount, isempty(vmZone)),
             _zonalSpreadPct = round(100 - (((stdevif(vmCount, isnotempty(vmZone)) / sumif(vmCount, isnotempty(vmZone))) * 100)), 2)
             by group, location, subscriptionId
+| project _totalZones, _totalZonalVms, _totalRegionalVms, _zonalSpreadPct, group, location, subscriptionId,
+          alert_totalZones = tobool(_totalZones < min_of(2, _totalZonalVms),
+          alert_totalRegionalVms = tobool(_totalRegionalVms > 0),
+          alert_zonalSpreadPct = tobool(_zonalSpreadPct < 80)
 | project group, location, subscriptionId,
           totalVms = _totalZonalVms + _totalRegionalVms,
           totalZonalVms = _totalZonalVms,
-          totalRegionalVms = iff((_totalRegionalVms > 0), strcat(_totalRegionalVms, ' ⚠️'), tostring(_totalRegionalVms)),
-          totalZones = iff((_totalZones < min_of(2, _totalZonalVms)), strcat(_totalZones, ' ⚠️'), tostring(_totalZones)),
-          zonalSpreadScore = iff((_zonalSpreadPct < 80), strcat(_zonalSpreadPct, ' % ⚠️'), strcat(_zonalSpreadPct, ' %'))
+          totalRegionalVms = iff(alert_totalRegionalVms, strcat(_totalRegionalVms, ' ⚠️'), tostring(_totalRegionalVms)),
+          totalZones = iff(alert_totalZones, strcat(_totalZones, ' ⚠️'), tostring(_totalZones)),
+          zonalSpreadScore = iff(alert_zonalSpreadPct, strcat(_zonalSpreadPct, ' % ⚠️'), strcat(_zonalSpreadPct, ' %'))
