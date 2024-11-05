@@ -10,7 +10,7 @@ Each query in this repository is structured to support easy and customizable VM 
 
 | Query File                 | Description                                                                                                                                                   |
 |----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **vm_group_inventory.kql** | Provides a full inventory of VMs grouped by your chosen method. This query helps you understand how VMs are distributed across your environment, giving you an overview of each group’s VM count and resource allocation. |
+| [**vm_group_inventory.kql**](vm_group_inventory.kql) | Provides a full inventory of VMs grouped by your chosen method. This query helps you understand how VMs are distributed across your environment, giving you an overview of each group’s VM count and resource allocation. |
 | **vm_group_sku_analysis.kql** | Analyzes the VM SKUs within each group, allowing you to assess resource allocation, identify cost implications, and optimize SKU usage based on workload requirements. |
 | **vm_group_vmss_analysis.kql** | Examines VM Scale Sets (VMSS) associated with each group, offering insights into scalability and deployment configurations for each workload. |
 | **vm_group_zone_analysis.kql** | Evaluates the distribution of VMs across availability zones within each group, providing insights into redundancy, fault tolerance, and geographic placement. |
