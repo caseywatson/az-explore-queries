@@ -36,15 +36,16 @@ resources
 
 | extend group = tostring(g)
 | where isnotempty(group)
-| summarize vmCount = count(),
+| summarize vmCount = count()
             by group, location, subscriptionId, vmZone = tostring(zones[0])
-| summarize _totalZones = countif(isnotempty(vmZone)),
+| summarize _totalVms = sum(vmCount),
+            _totalZones = countif(isnotempty(vmZone)),
             _totalZonalVms = sumif(vmCount, isnotempty(vmZone)),
             _totalRegionalVms = sumif(vmCount, isempty(vmZone)),
-            _zonalSpreadPct = iff(countif(isnotempty(vmZone)) < minZones, real(0), round(100 - (((stdevif(vmCount, isnotempty(vmZone)) / sumif(vmCount, isnotempty(vmZone))) * 100)), 2))
+            _zonalSpreadPct = round(iff((countif(isnotempty(vmZone)) < min_of(2, sum(vmCount))), real(0), (100 - ((stdevif(vmCount, isnotempty(vmZone)) / sumif(vmCount, isnotempty(vmZone)) * 100)))), 2)
             by group, location, subscriptionId
 | project _totalZones, _totalZonalVms, _totalRegionalVms, _zonalSpreadPct, group, location, subscriptionId,
-          alert_totalZones = tobool(_totalZones < _minZones),
+          alert_totalZones = tobool(_totalZones < min_of(2, _totalVms)),
           alert_totalRegionalVms = tobool(_totalRegionalVms > 0),
           alert_zonalSpreadPct = tobool(_zonalSpreadPct < 80)
 | project group, location, subscriptionId,
