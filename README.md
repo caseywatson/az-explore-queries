@@ -4,7 +4,7 @@ Welcome to **Azure VM Exploration Queries**, a collection of flexible [Azure Res
 
 ## Overview
 
-Each query in this repository is structured to support easy and customizable VM grouping. Simply read the **commented "Grouping Options" section** in each script, select the option that best fits your environment, and uncomment the relevant line(s). This flexible approach makes it easy to tailor analyses to your specific needs, whether you’re working with small applications or complex, multi-tier workloads.
+Each query in this repository is structured to support easy and customizable VM grouping. Simply read the **commented "Grouping Options" section** in each query, select the option that best fits your environment, and uncomment the relevant line(s). This flexible approach makes it easy to tailor analyses to your specific needs, whether you’re working with small applications or complex, multi-tier workloads.
 
 ## Queries Included
 
