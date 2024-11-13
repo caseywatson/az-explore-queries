@@ -26,9 +26,8 @@ resources
 // | extend g = tostring(tags['tag-name'])
 
 // Option 5: Uncomment the following section to group VMs by multiple values.
-//           In the following example, VMs are grouped by both 'tag-name-1' and 'tag-name-2' values.
 
-// | extend g = dynamic({ 'tag_1' = tags['tag-name-1'], 'tag_2' = tags['tag-name-2'] })
+// | extend g = bag_pack('key_1', 'value_1', 'key_2', 'value_2')
 
 // Option 6: Uncomment the following section to group by custom KQL expression.
 
